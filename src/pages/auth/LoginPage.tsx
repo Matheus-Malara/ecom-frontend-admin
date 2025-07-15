@@ -11,15 +11,15 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (getAccessToken()) {
-            navigate("/products");
+            navigate("/");
         }
-    }, []);
+    }, [navigate]);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         try {
             await login(email, password);
-            navigate("/products");
+            navigate("/");
         } catch {
             alert("Invalid credentials");
         }
