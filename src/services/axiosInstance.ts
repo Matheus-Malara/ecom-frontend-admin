@@ -1,16 +1,26 @@
 import axios from "axios";
-import {getAccessToken, getRefreshToken, setTokens, clearTokens} from "@/services/authStorage";
+import type {AxiosRequestConfig} from "axios";
+import {
+    getAccessToken,
+    getRefreshToken,
+    setTokens,
+    clearTokens,
+} from "@/services/authStorage";
 import {refreshToken} from "@/services/authApi";
 
 const api = axios.create({baseURL: "/api"});
 
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: { resolve: (token: string) => void; reject: (err: any) => void }[] = [];
+
+interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+    _retry?: boolean;
+}
 
 function processQueue(error: any, token: string | null = null) {
-    failedQueue.forEach(prom => {
+    failedQueue.forEach((prom) => {
         if (error) prom.reject(error);
-        else prom.resolve(token);
+        else prom.resolve(token!);
     });
     failedQueue = [];
 }
@@ -18,7 +28,12 @@ function processQueue(error: any, token: string | null = null) {
 api.interceptors.request.use(
     (config) => {
         const token = getAccessToken();
-        if (token) config.headers.Authorization = `Bearer ${token}`;
+        const isRefreshEndpoint = config.url?.includes("/auth/refresh");
+
+        if (token && !isRefreshEndpoint) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+
         return config;
     },
     (error) => Promise.reject(error)
@@ -27,11 +42,15 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
-        const originalRequest = error.config;
+        const originalRequest = error.config as CustomAxiosRequestConfig;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (
+            error.response?.status === 401 &&
+            !originalRequest._retry &&
+            getRefreshToken()
+        ) {
             if (isRefreshing) {
-                return new Promise(function (resolve, reject) {
+                return new Promise((resolve, reject) => {
                     failedQueue.push({resolve, reject});
                 })
                     .then((token) => {

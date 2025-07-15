@@ -1,5 +1,6 @@
 import {NavLink, Outlet} from "react-router-dom";
 import Header from "@/components/Header";
+import ToastListener from "@/components/ToastListener.tsx";
 
 export default function SidebarLayout() {
     return (
@@ -17,8 +18,9 @@ export default function SidebarLayout() {
             </aside>
 
             <div className="flex-1 bg-gray-100 min-h-screen flex flex-col">
-                <Header/> {/* 👈 Aparece sempre nas rotas privadas */}
+                <Header/>
                 <main className="p-6 flex-1">
+                    <ToastListener/>
                     <Outlet/>
                 </main>
             </div>
