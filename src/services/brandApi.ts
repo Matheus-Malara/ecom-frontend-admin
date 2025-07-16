@@ -1,12 +1,8 @@
 import api from "@/services/axiosInstance"
-import type { Brand } from "@/types/brand"
-import type { StandardResponse } from "@/types/api-response"
-import type { Page } from "@/types/paginated"
-
-export interface BrandFilter {
-    active?: boolean
-    name?: string
-}
+import type {Brand} from "@/types/brand"
+import type {StandardResponse} from "@/types/api-response"
+import type {Page} from "@/types/paginated"
+import type {BrandFilter} from "@/types/brand-filter.ts";
 
 export interface BrandForm {
     name: string
@@ -15,12 +11,20 @@ export interface BrandForm {
 }
 
 // 🔍 Get paginated and filtered brands
-export async function getBrands(params: {
-    page?: number
-    size?: number
-    sort?: string
-} & BrandFilter): Promise<Page<Brand>> {
-    const response = await api.get<StandardResponse<Page<Brand>>>(`/brands`, { params });
+export async function getFilteredBrands(
+    filter: BrandFilter,
+    page = 0,
+    size = 10
+): Promise<Page<Brand>> {
+    const params = new URLSearchParams();
+
+    if (filter.name) params.append("name", filter.name);
+    if (filter.active !== undefined) params.append("active", String(filter.active));
+
+    params.append("page", page.toString());
+    params.append("size", size.toString());
+
+    const response = await api.get<StandardResponse<Page<Brand>>>("/brands", {params});
     return response.data.data;
 }
 
@@ -62,11 +66,11 @@ export async function deleteBrandImage(id: number): Promise<void> {
 
 // ✅ Toggle active status
 export async function toggleBrandStatus(id: number, active: boolean): Promise<void> {
-    await api.patch(`/brands/${id}/status`, null, { params: { active } });
+    await api.patch(`/brands/${id}/status`, null, {params: {active}});
 }
 
 // 📦 Get all active brands (no pagination)
 export async function getAllActiveBrands(): Promise<Brand[]> {
-    const page = await getBrands({ active: true, size: 999 });
+    const page = await getFilteredBrands({active: true}, 0, 999);
     return page.content;
 }
