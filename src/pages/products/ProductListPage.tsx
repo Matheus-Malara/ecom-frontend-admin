@@ -8,7 +8,6 @@ import {getAllActiveCategories} from "@/services/categoryApi";
 
 import {useToastStore} from "@/stores/toastStore";
 
-
 import type {Product} from "@/types/product";
 import type {Brand} from "@/types/brand";
 import type {Category} from "@/types/category";
@@ -35,6 +34,16 @@ export default function ProductListPage() {
         getAllActiveCategories().then(setCategories).catch(() => toast.error("Failed to load categories"));
     }, []);
 
+    const handleToggleStatus = async (product: Product) => {
+        try {
+            await toggleProductStatus(product.id, !product.active);
+            setToast(`Product ${product.active ? "deactivated" : "activated"}`, "success");
+            fetchProducts();
+        } catch {
+            setToast("Failed to update status", "error");
+        }
+    };
+
     const fetchProducts = async () => {
         setLoading(true);
         try {
@@ -44,16 +53,6 @@ export default function ProductListPage() {
             toast.error("Failed to load products");
         } finally {
             setLoading(false);
-        }
-    };
-
-    const handleToggleStatus = async (product: Product) => {
-        try {
-            await toggleProductStatus(product.id, !product.active);
-            setToast(`Product ${product.active ? "deactivated" : "activated"}`, "success");
-            fetchProducts();
-        } catch {
-            setToast("Failed to update status", "error");
         }
     };
 

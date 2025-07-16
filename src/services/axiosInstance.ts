@@ -11,19 +11,20 @@ import {refreshToken} from "@/services/authApi";
 const api = axios.create({baseURL: "/api"});
 
 let isRefreshing = false;
-let failedQueue: { resolve: (token: string) => void; reject: (err: any) => void }[] = [];
+let failedQueue: { resolve: (token: string) => void; reject: (err: unknown) => void }[] = [];
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
     _retry?: boolean;
 }
 
-function processQueue(error: any, token: string | null = null) {
+function processQueue(error: unknown, token: string | null = null): void {
     failedQueue.forEach((prom) => {
         if (error) prom.reject(error);
         else prom.resolve(token!);
     });
     failedQueue = [];
 }
+
 
 api.interceptors.request.use(
     (config) => {
@@ -54,7 +55,11 @@ api.interceptors.response.use(
                     failedQueue.push({resolve, reject});
                 })
                     .then((token) => {
-                        originalRequest.headers.Authorization = `Bearer ${token}`;
+                        originalRequest.headers = {
+                            ...originalRequest.headers,
+                            Authorization: `Bearer ${token}`,
+                        };
+
                         return api(originalRequest);
                     })
                     .catch((err) => Promise.reject(err));
@@ -67,7 +72,11 @@ api.interceptors.response.use(
                 const newTokens = await refreshToken(getRefreshToken()!);
                 setTokens(newTokens.accessToken, newTokens.refreshToken);
                 processQueue(null, newTokens.accessToken);
-                originalRequest.headers.Authorization = `Bearer ${newTokens.accessToken}`;
+                originalRequest.headers = {
+                    ...originalRequest.headers,
+                    Authorization: `Bearer ${newTokens.accessToken}`,
+                };
+
                 return api(originalRequest);
             } catch (err) {
                 processQueue(err, null);
