@@ -2,6 +2,7 @@ import {Routes, Route} from "react-router-dom";
 import LoginPage from "@/pages/auth/LoginPage";
 import ProductListPage from "@/pages/products/ProductListPage";
 import ProductFormPage from "@/pages/products/ProductFormPage";
+import BrandFormPage from "@/pages/brands/BrandFormPage";
 import RequireAuth from "@/components/RequireAuth.tsx";
 import SidebarLayout from "@/layouts/SidebarLayout";
 import DashboardPage from "@/pages/DashboardPage.tsx";
@@ -26,6 +27,8 @@ export default function App() {
                     <Route path="/products/new" element={<ProductFormPage/>}/>
                     <Route path="/products/:id/edit" element={<ProductFormPage/>}/>
                     <Route path="/brands" element={<BrandListPage/>}/>
+                    <Route path="/brands/new" element={<BrandFormPage/>}/>
+                    <Route path="/brands/:id/edit" element={<BrandFormPage/>}/>
                     <Route path="/categories" element={<CategoryListPage/>}/>
                     <Route path="/orders" element={<OrderListPage/>}/>
                     <Route path="/users" element={<UserListPage/>}/>

@@ -97,11 +97,11 @@ export default function BrandListPage() {
             <div className="overflow-x-auto">
                 <table className="w-full text-sm border bg-white">
                     <thead className="bg-gray-100">
-                    <tr>
-                        <th className="text-left p-3">Logo</th>
-                        <th className="text-left p-3">Name</th>
-                        <th className="text-left p-3">Status</th>
-                        <th className="text-left p-3">Actions</th>
+                    <tr className="text-left">
+                        <th className="p-3">Logo</th>
+                        <th className="p-3">Name</th>
+                        <th className="p-3">Status</th>
+                        <th className="p-3">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -111,39 +111,47 @@ export default function BrandListPage() {
                         </tr>
                     ) : (
                         brandsPage?.content.map((brand) => (
-                            <tr key={brand.id} className="border-t">
+                            <tr key={brand.id} className="border-t align-middle">
                                 <td className="p-3">
-                                    <img src={brand.logoUrl} alt="Brand" className="w-16 h-16 object-cover"/>
+                                    <img
+                                        src={brand.logoUrl}
+                                        alt="Brand"
+                                        className="w-16 h-16 object-contain"
+                                    />
                                 </td>
-                                <td className="p-3">{brand.name}</td>
-                                <td className="p-3">
-                                    <span
-                                        className={`px-2 py-1 rounded text-xs font-semibold ${
-                                            brand.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-700"
-                                        }`}
-                                    >
-                                        {brand.active ? "Active" : "Inactive"}
-                                    </span>
+                                <td className="p-3 align-middle">{brand.name}</td>
+                                <td className="p-3 align-middle">
+                        <span
+                            className={`px-2 py-1 rounded text-xs font-semibold ${
+                                brand.active
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-red-100 text-red-700"
+                            }`}
+                        >
+                            {brand.active ? "Active" : "Inactive"}
+                        </span>
                                 </td>
-                                <td className="p-3 flex gap-2">
-                                    <button
-                                        onClick={() => handleToggleStatus(brand)}
-                                        className="text-sm px-3 py-1 rounded bg-yellow-100 hover:bg-yellow-200"
-                                    >
-                                        {brand.active ? "Deactivate" : "Activate"}
-                                    </button>
-                                    <button
-                                        onClick={() => navigate(`/brands/${brand.id}/edit`)}
-                                        className="text-sm px-3 py-1 rounded bg-blue-100 hover:bg-blue-200"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(brand.id)}
-                                        className="text-sm px-3 py-1 rounded bg-red-100 hover:bg-red-200"
-                                    >
-                                        Delete
-                                    </button>
+                                <td className="p-3 align-middle">
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => handleToggleStatus(brand)}
+                                            className="text-sm px-3 py-1 rounded bg-yellow-100 hover:bg-yellow-200"
+                                        >
+                                            {brand.active ? "Deactivate" : "Activate"}
+                                        </button>
+                                        <button
+                                            onClick={() => navigate(`/brands/${brand.id}/edit`)}
+                                            className="text-sm px-3 py-1 rounded bg-blue-100 hover:bg-blue-200"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(brand.id)}
+                                            className="text-sm px-3 py-1 rounded bg-red-100 hover:bg-red-200"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))
@@ -151,6 +159,7 @@ export default function BrandListPage() {
                     </tbody>
                 </table>
             </div>
+
 
             {/* Pagination */}
             {brandsPage && brandsPage.totalPages > 1 && (
