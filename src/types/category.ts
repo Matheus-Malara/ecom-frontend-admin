@@ -1,13 +1,13 @@
-export type Category = {
-    id: number
-    name: string
-    description: string
-    imageUrl: string
-    active: boolean
+export interface Category {
+    id: number;
+    name: string;
+    description?: string;
+    imageUrl?: string;
+    active: boolean;
 }
 
 export interface CategoryForm {
-    name: string
-    description?: string
-    imageUrl?: string
+    name: string;
+    description?: string;
+    imageUrl?: string;
 }

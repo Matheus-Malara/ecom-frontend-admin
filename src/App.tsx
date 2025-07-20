@@ -14,6 +14,7 @@ import {ToastContainer} from "react-toastify";
 
 
 import "react-toastify/dist/ReactToastify.css";
+import CategoryFormPage from "@/pages/categories/CategoryFormPage.tsx";
 
 export default function App() {
     return (
@@ -30,6 +31,8 @@ export default function App() {
                     <Route path="/brands/new" element={<BrandFormPage/>}/>
                     <Route path="/brands/:id/edit" element={<BrandFormPage/>}/>
                     <Route path="/categories" element={<CategoryListPage/>}/>
+                    <Route path="/categories/new" element={<CategoryFormPage/>}/>
+                    <Route path="/categories/:id/edit" element={<CategoryFormPage/>}/>
                     <Route path="/orders" element={<OrderListPage/>}/>
                     <Route path="/users" element={<UserListPage/>}/>
                 </Route>
