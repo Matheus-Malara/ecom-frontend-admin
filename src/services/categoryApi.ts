@@ -1,5 +1,3 @@
-// src/services/categoryApi.ts
-
 import api from "@/services/axiosInstance";
 import type {StandardResponse} from "@/types/api-response";
 import type {Page} from "@/types/paginated";
