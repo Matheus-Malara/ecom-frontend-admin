@@ -1,14 +1,10 @@
-export interface OrderItem {
-    productName: string;
-    quantity: number;
-    pricePerUnit: number;
-    imageUrl: string;
-}
+import type {OrderStatus} from "./order-status";
+import type {OrderItem} from "./order-item";
 
 export interface Order {
     id: number;
     totalAmount: number;
-    status: "PENDING" | "PAID" | "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+    status: OrderStatus;
     createdAt: string;
     items: OrderItem[];
 }
