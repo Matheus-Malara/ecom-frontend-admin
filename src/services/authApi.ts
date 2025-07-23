@@ -1,5 +1,5 @@
 import api from "@/services/axiosInstance";
-import type {StandardResponse} from "@/types/api-response";
+import type { StandardResponse } from "@/types/api-response";
 
 export interface LoginRequest {
     email: string;
@@ -17,7 +17,9 @@ export async function loginUser(data: LoginRequest): Promise<LoginResponse> {
     return response.data.data;
 }
 
-export async function refreshToken(refreshToken: string): Promise<LoginResponse> {
-    const response = await api.post<StandardResponse<LoginResponse>>("/auth/refresh", { refreshToken });
+export async function requestRefreshToken(refreshToken: string): Promise<LoginResponse> {
+    const response = await api.post<StandardResponse<LoginResponse>>("/auth/refresh", {
+        refreshToken,
+    });
     return response.data.data;
 }

@@ -4,9 +4,9 @@ import {
     getAccessToken,
     getRefreshToken,
     setTokens,
-    clearTokens,
+    logout
 } from "@/services/authStorage";
-import {refreshToken} from "@/services/authApi";
+import {requestRefreshToken} from "@/services/authApi";
 
 const api = axios.create({baseURL: "/api"});
 
@@ -25,14 +25,14 @@ function processQueue(error: unknown, token: string | null = null): void {
     failedQueue = [];
 }
 
-
 api.interceptors.request.use(
     (config) => {
         const token = getAccessToken();
         const isRefreshEndpoint = config.url?.includes("/auth/refresh");
 
         if (token && !isRefreshEndpoint) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers = config.headers || {};
+            config.headers["Authorization"] = `Bearer ${token}`;
         }
 
         return config;
@@ -55,11 +55,8 @@ api.interceptors.response.use(
                     failedQueue.push({resolve, reject});
                 })
                     .then((token) => {
-                        originalRequest.headers = {
-                            ...originalRequest.headers,
-                            Authorization: `Bearer ${token}`,
-                        };
-
+                        originalRequest.headers = originalRequest.headers || {};
+                        originalRequest.headers["Authorization"] = `Bearer ${token}`;
                         return api(originalRequest);
                     })
                     .catch((err) => Promise.reject(err));
@@ -69,19 +66,17 @@ api.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                const newTokens = await refreshToken(getRefreshToken()!);
+                const newTokens = await requestRefreshToken(getRefreshToken()!);
                 setTokens(newTokens.accessToken, newTokens.refreshToken);
                 processQueue(null, newTokens.accessToken);
-                originalRequest.headers = {
-                    ...originalRequest.headers,
-                    Authorization: `Bearer ${newTokens.accessToken}`,
-                };
+
+                originalRequest.headers = originalRequest.headers || {};
+                originalRequest.headers["Authorization"] = `Bearer ${newTokens.accessToken}`;
 
                 return api(originalRequest);
             } catch (err) {
                 processQueue(err, null);
-                clearTokens();
-                window.location.href = "/login";
+                logout();
                 return Promise.reject(err);
             } finally {
                 isRefreshing = false;
