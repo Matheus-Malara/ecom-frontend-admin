@@ -15,3 +15,8 @@ export function clearTokens() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
 }
+
+export function logout() {
+    clearTokens();
+    window.location.href = "/login";
+}
