@@ -37,12 +37,13 @@ git clone https://github.com/Matheus-Malara/ecom-frontend-admin.git
 cd ecom-frontend-admin
 ```
 
-3) Install dependencies
+2) Install dependencies
 
 ```bash
 npm install
 ```
-5) Run locally
+
+3) Run locally
 ```bash  
 npm run dev
 ```
@@ -95,13 +96,6 @@ If you need a different URL, adjust the API client inside `src/services/`.
 - Users: list + activation toggle
 - Global toasts, loading and error handling
 - Modern, responsive UI with Tailwind
-
-## 🛑 Limitations (By Design)
-- Educational scope only (no production hardening)
-- No e2e/unit tests
-- Error handling is basic
-- No i18n
-- Subject to breaking changes
 
 ## 🧠 Learning Goals
 Practice modern React with TypeScript, protected routing, API integration, token flows via backend, global state with Zustand, and a clean UI with Tailwind.
