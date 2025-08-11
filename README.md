@@ -1,69 +1,119 @@
-# React + TypeScript + Vite
+# Ecom Frontend Admin
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Admin dashboard (learning project) for managing an e-commerce: products, brands, categories, orders and users.  
+Built with React + TypeScript + Vite + TailwindCSS.
 
-Currently, two official plugins are available:
+⚠️ **Educational only** — not production-ready.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Description
 
-## Expanding the ESLint configuration
+This frontend provides an admin interface secured by authentication.  
+Only users with `ROLE_ADMIN` (from Keycloak) can access the dashboard.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+You can:
+- Manage Products (CRUD, images, pagination & filters)
+- Manage Brands and Categories (CRUD, images, pagination & filters)
+- Track Orders and update status
+- List Users and activate/deactivate
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+It communicates with a Spring Boot backend and uses Keycloak for auth.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🧰 Tech Stack
+- React + TypeScript + Vite
+- TailwindCSS
+- Axios (HTTP)
+- React Router
+- Zustand (state)
+- React Toastify (toasts)
+- Framer Motion (animations)
+- lucide-react (icons)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🚀 Getting Started
+
+1) Clone the repository
+
+```bash
+git clone https://github.com/Matheus-Malara/ecom-frontend-admin.git
+cd ecom-frontend-admin
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3) Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+5) Run locally
+```bash  
+npm run dev
+```
+
+Backend must be running at `http://localhost:8081` and Keycloak must be configured locally (see Authentication).  
+Use `npm run preview` after building to test a production build locally.
+
+## 🔧 NPM Scripts
+- `dev` – start Vite dev server
+- `build` – type-check and build production bundle
+- `preview` – preview the built app
+
+## ⚙️ Project Structure
+
+```
+src/
+├─ components/     # Reusable UI pieces (forms, tables, modals, etc.)
+├─ hooks/          # Custom React hooks (data fetching, auth helpers, etc.)
+├─ layouts/        # App shell / sidebar / header wrappers
+├─ pages/          # Route-level pages (Products, Brands, Categories, Orders, Users, Auth)
+├─ services/       # API clients, HTTP interceptors, domain services
+├─ stores/         # Zustand stores (auth, toasts, UI state)
+├─ types/          # Shared TypeScript types/interfaces
+├─ App.tsx         # Routes and top-level layout
+├─ main.tsx        # App entry point
+├─ index.css       # Tailwind base styles
+└─ App.css         # Component-scoped/global overrides when needed
+```
+
+---
+
+
+## 🔐 Authentication
+Login is performed via backend endpoints (the app does not talk to Keycloak directly).
+
+You must:
+- Run Keycloak locally
+- Create an admin user (`ROLE_ADMIN`) that the backend recognizes
+
+The backend handles token issuance/refresh and protects the APIs this UI consumes.
+
+No `.env` is required here; the API base is `http://localhost:8081`.  
+If you need a different URL, adjust the API client inside `src/services/`.
+
+## 💡 Features
+- Protected routes (`ROLE_ADMIN`)
+- Products: CRUD, image upload, pagination & filters
+- Brands/Categories: CRUD, image upload, pagination & filters
+- Orders: list + status updates
+- Users: list + activation toggle
+- Global toasts, loading and error handling
+- Modern, responsive UI with Tailwind
+
+## 🛑 Limitations (By Design)
+- Educational scope only (no production hardening)
+- No e2e/unit tests
+- Error handling is basic
+- No i18n
+- Subject to breaking changes
+
+## 🧠 Learning Goals
+Practice modern React with TypeScript, protected routing, API integration, token flows via backend, global state with Zustand, and a clean UI with Tailwind.
+
+## 🌐 Related Projects
+- Backend (Spring Boot): [ecom-backend](https://github.com/Matheus-Malara/ecom-backend)
+- Store Frontend: [ecom-frontend](https://github.com/Matheus-Malara/ecom-frontend)
+
+## ✅ Prerequisites
+- Node.js (LTS recommended)
+- Running backend at `http://localhost:8081`
+- Local Keycloak instance configured with an ADMIN user recognized by the backend
+
+## 📄 License
+No license — educational use only.
