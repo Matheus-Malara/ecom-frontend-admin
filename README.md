@@ -108,6 +108,3 @@ Practice modern React with TypeScript, protected routing, API integration, token
 - Node.js (LTS recommended)
 - Running backend at `http://localhost:8081`
 - Local Keycloak instance configured with an ADMIN user recognized by the backend
-
-## 📄 License
-No license — educational use only.
